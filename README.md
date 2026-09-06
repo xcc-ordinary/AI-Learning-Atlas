@@ -12,9 +12,26 @@ An Obsidian-native visual learning cockpit for completing Microsoft's [AI for Be
 - Direct AI translation for selections or entire lessons
 - DeepSeek, Kimi and OpenAI-compatible providers with Obsidian Secret Storage
 
-## Install
+## Install with BRAT (recommended)
 
-1. Download `main.js`, `manifest.json`, and `styles.css` from the latest release.
+BRAT installs the plugin from GitHub Releases and can keep it updated when new versions are published.
+
+1. Install and enable **BRAT** from Obsidian Community plugins.
+2. Open BRAT settings and choose **Add Beta plugin**.
+3. Enter:
+
+   ```text
+   https://github.com/xcc-ordinary/AI-Learning-Atlas
+   ```
+
+4. Use the normal, non-frozen installation option and enable **AI Learning Atlas**.
+5. Run **Check for updates** in BRAT when you want the latest release, or enable its startup update check.
+
+Do not choose a frozen version if you want to receive future updates.
+
+## Manual installation
+
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/xcc-ordinary/AI-Learning-Atlas/releases/latest).
 2. Create `<your-vault>/.obsidian/plugins/ai-learning-atlas/`.
 3. Put the three files into that folder.
 4. Restart Obsidian and enable **AI Learning Atlas** under Community plugins.
