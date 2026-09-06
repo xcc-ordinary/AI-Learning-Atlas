@@ -972,3 +972,245 @@
     background: var(--background-primary);
   }
 }
+
+/* Wide desktop composition and refined Obsidian chrome. */
+.workspace-leaf-content[data-type="ai-learning-atlas-view"] .view-content {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.workspace-leaf-content[data-type="ai-learning-atlas-view"]
+  .view-content:hover {
+  scrollbar-color: color-mix(in srgb, var(--text-muted) 32%, transparent)
+    transparent;
+}
+.workspace-leaf-content[data-type="ai-learning-atlas-view"]
+  .view-content::-webkit-scrollbar {
+  width: 5px;
+}
+.workspace-leaf-content[data-type="ai-learning-atlas-view"]
+  .view-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.workspace-leaf-content[data-type="ai-learning-atlas-view"]
+  .view-content::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: transparent;
+}
+.workspace-leaf-content[data-type="ai-learning-atlas-view"]
+  .view-content:hover::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--text-muted) 30%, transparent);
+}
+.atlas {
+  width: min(100%, 92rem);
+  max-width: none;
+  padding: 3rem clamp(1.5rem, 4vw, 4.5rem) 7rem;
+}
+.atlas-head,
+.bar,
+.atlas-nav,
+.course-heading,
+.timeline,
+.graph,
+.graph-intro,
+.graph-button,
+.hero,
+.facts,
+.section-head,
+.road {
+  width: 100%;
+}
+.atlas-head {
+  align-items: center;
+}
+.bar {
+  margin: 1.5rem 0 1.4rem;
+  opacity: 0.7;
+}
+.atlas-nav {
+  width: max-content;
+  padding: 0.22rem;
+  border-color: color-mix(in srgb, white 38%, var(--atlas-line));
+  box-shadow:
+    0 0.5px 0 rgba(255, 255, 255, 0.8) inset,
+    0 0.4rem 1.6rem rgba(0, 0, 0, 0.055);
+}
+.atlas-nav button {
+  min-height: 2.15rem;
+  padding-inline: 1rem;
+  font-size: 0.78rem;
+  font-weight: 520;
+}
+.atlas-nav button.on {
+  background: color-mix(in srgb, var(--background-primary) 90%, white 10%);
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.08),
+    0 3px 10px rgba(0, 0, 0, 0.06);
+}
+.course-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin: 1.25rem 0 2rem;
+}
+.course-heading p {
+  max-width: 32rem;
+  margin: 0;
+  text-align: right;
+}
+.timeline-group {
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  scroll-margin-top: 5rem;
+}
+.timeline:before {
+  left: 1.625rem;
+}
+.timeline-marker {
+  padding-top: 1.05rem;
+}
+.timeline-marker span {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-color: color-mix(in srgb, var(--atlas-accent) 18%, var(--atlas-line));
+  background: color-mix(in srgb, var(--background-primary) 88%, transparent);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.75) inset,
+    0 0.5rem 1.5rem rgba(0, 0, 0, 0.045);
+  backdrop-filter: blur(1rem) saturate(160%);
+}
+.timeline-body {
+  border-color: color-mix(in srgb, var(--text-normal) 7%, transparent);
+  border-radius: 1.4rem;
+  background: color-mix(in srgb, var(--background-primary) 94%, transparent);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 1.25rem 3.75rem rgba(0, 0, 0, 0.045);
+  backdrop-filter: blur(1.5rem) saturate(135%);
+}
+.timeline-head {
+  min-height: 4.8rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+}
+.timeline-head h3 {
+  font-size: 1rem;
+  font-weight: 680;
+  letter-spacing: -0.012em;
+}
+.timeline-head span {
+  margin-top: 0.25rem;
+  font-size: 0.7rem;
+}
+.lesson-item {
+  margin-inline: 1rem;
+}
+.lesson-row {
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  min-height: 5rem;
+  padding: 0.85rem 0.5rem;
+}
+.check {
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  background: var(--background-secondary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.lesson-copy strong {
+  font-size: 0.9rem;
+  font-weight: 640;
+  letter-spacing: -0.008em;
+}
+.lesson-copy span {
+  margin-top: 0.22rem;
+  font-size: 0.7rem;
+}
+.lesson-actions .study {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 4.75rem;
+  min-height: 2.35rem;
+  justify-content: center;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--atlas-accent) 18%, transparent);
+  background: var(--atlas-accent-soft);
+  color: var(--atlas-accent);
+  font-size: 0.75rem;
+  font-weight: 620;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+}
+.lesson-actions .study:after {
+  content: "›";
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1;
+  transition: transform 160ms ease-out;
+}
+.lesson-actions .study:hover {
+  background: color-mix(in srgb, var(--atlas-accent) 15%, transparent);
+}
+.lesson-actions .study:hover:after {
+  transform: translateX(2px);
+}
+.lesson-directory {
+  margin: 0 0.5rem 0.8rem 3.25rem;
+}
+.lesson-directory summary {
+  width: fit-content;
+  color: var(--text-muted);
+}
+.directory-links {
+  margin-top: 0.2rem;
+  border-radius: 0.8rem;
+  background: color-mix(in srgb, var(--background-secondary) 38%, transparent);
+  overflow: hidden;
+}
+.directory-link {
+  padding-inline: 0.75rem;
+}
+.directory-link:hover {
+  background: color-mix(in srgb, var(--atlas-accent) 8%, transparent);
+}
+@media (min-width: 90rem) {
+  .atlas {
+    width: min(100%, 100rem);
+  }
+  .lesson-row {
+    grid-template-columns: 2.5rem minmax(0, 1fr) 6rem;
+  }
+}
+@media (max-width: 760px) {
+  .atlas {
+    padding-inline: 1rem;
+  }
+  .course-heading {
+    display: block;
+  }
+  .course-heading p {
+    margin-top: 0.45rem;
+    text-align: left;
+  }
+  .timeline-group {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.65rem;
+  }
+  .timeline:before {
+    left: 1rem;
+  }
+  .timeline-marker span {
+    width: 2rem;
+    height: 2rem;
+  }
+  .lesson-item {
+    margin-inline: 0.65rem;
+  }
+  .lesson-row {
+    grid-template-columns: 2rem minmax(0, 1fr);
+  }
+  .lesson-actions {
+    grid-column: 2;
+  }
+}

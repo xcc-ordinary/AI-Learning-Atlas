@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.1
+
+- Expanded the interface to use wide desktop workspaces without constraining the right side
+- Replaced the persistent heavy scrollbar with a subtle hover-revealed thumb
+- Refined module materials, spacing, typography and course actions for a calmer premium hierarchy
+
 ## 1.5.0
 
 - Rebuilt the learning path from the official curriculum, including setup and extras

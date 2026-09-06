@@ -593,7 +593,7 @@ View.prototype.course = async function (root, done) {
       copy.createEl("strong", { text: l.title });
       copy.createEl("span", { text: l.concepts.join(" · ") });
       const actions = row.createDiv({ cls: "lesson-actions" }),
-        study = actions.createEl("button", { text: "开始", cls: "study" });
+        study = actions.createEl("button", { text: "打开", cls: "study" });
       study.onclick = () => this.p.workspace(l);
       const sections = sectionMap.get(l.n) || [];
       if (sections.length) {
