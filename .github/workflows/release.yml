@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  push:
+    tags: ["*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Verify tag
+        shell: bash
+        run: test "$GITHUB_REF_NAME" = "$(node -p "require('./manifest.json').version")"
+      - run: npm test
+      - run: npm run build
+      - run: npm run check:release
+      - name: Publish release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" main.js manifest.json styles.css --verify-tag --title "AI Learning Atlas $GITHUB_REF_NAME" --generate-notes

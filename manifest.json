@@ -1,0 +1,10 @@
+{
+  "id": "ai-learning-atlas",
+  "name": "AI Learning Atlas",
+  "version": "1.4.0",
+  "minAppVersion": "1.11.0",
+  "description": "A visual learning cockpit, course map, notes and AI translation for AI for Beginners.",
+  "author": "Sisyphe",
+  "authorUrl": "https://github.com/xcc-ordinary",
+  "isDesktopOnly": false
+}

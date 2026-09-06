@@ -1,0 +1,30 @@
+{
+  "name": "ai-learning-atlas",
+  "version": "1.4.0",
+  "description": "A visual Obsidian learning cockpit for Microsoft AI for Beginners.",
+  "private": true,
+  "license": "MIT",
+  "author": "Sisyphe",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xcc-ordinary/AI-Learning-Atlas.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xcc-ordinary/AI-Learning-Atlas/issues"
+  },
+  "homepage": "https://github.com/xcc-ordinary/AI-Learning-Atlas#readme",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "node esbuild.config.mjs production",
+    "test": "node tests/provider-smoke.test.cjs",
+    "check:release": "node scripts/check-release.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "obsidian": "^1.11.0",
+    "prettier": "^3.9.6"
+  }
+}

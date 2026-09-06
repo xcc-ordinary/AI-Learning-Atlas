@@ -1,0 +1,11 @@
+node_modules/
+.test-dist/
+coverage/
+/main.js
+*.map
+release/
+*.zip
+data.json
+.DS_Store
+.idea/
+.vscode/
