@@ -268,6 +268,33 @@ const lessons = modules.flatMap((m, mi) =>
     normalizePath(
       `${NOTES}/${String(l.n).padStart(2, "0")} ${safe(l.title)}.md`,
     );
+const learningStages = [
+  {
+    code: "00",
+    title: "学习准备",
+    detail: "环境配置与运行方式",
+    path: "lessons/0-course-setup/setup.md",
+  },
+  { code: "I", title: "人工智能导论", detail: "课程 01", range: [1, 1] },
+  { code: "II", title: "符号人工智能", detail: "课程 02", range: [2, 2] },
+  { code: "III", title: "神经网络", detail: "课程 03–05", range: [3, 5] },
+  { code: "IV", title: "计算机视觉", detail: "课程 06–12", range: [6, 12] },
+  { code: "V", title: "自然语言处理", detail: "课程 13–20", range: [13, 20] },
+  { code: "VI", title: "其他 AI 方法", detail: "课程 21–23", range: [21, 23] },
+  { code: "VII", title: "负责任的 AI", detail: "课程 24", range: [24, 24] },
+  {
+    code: "IX",
+    title: "扩展学习",
+    detail: "多模态、CLIP 与 VQGAN",
+    path: "lessons/X-Extras/X1-MultiModal/README.md",
+  },
+];
+const cleanHeading = (heading) =>
+  heading
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/[*_`]/g, "")
+    .replace(/^\p{Extended_Pictographic}\s*/u, "")
+    .trim();
 class View extends ItemView {
   constructor(leaf, p) {
     super(leaf);
@@ -473,40 +500,51 @@ View.prototype.home = function (root, done, next, pct) {
     text: `${next.module} · ${next.week} · ${next.concepts.join(" / ")}`,
   });
   const actions = hero.createDiv({ cls: "hero-actions" }),
-    start = actions.createEl("button", { text: "开始学习", cls: "primary" }),
-    translate = actions.createEl("button", {
-      text: "翻译全文",
-      cls: "secondary",
-    });
+    start = actions.createEl("button", { text: "继续学习", cls: "primary" });
   start.onclick = () => this.p.workspace(next);
-  translate.onclick = () => this.p.translateLesson(next);
   const facts = root.createDiv({ cls: "facts" });
   [
     [`${done.size}/24`, `已完成`],
-    [`${pct}%`, `总进度`],
-    [this.p.providerLabel(), "翻译模型"],
+    [`${24 - done.size}`, `剩余课程`],
+    [`第 ${String(next.n).padStart(2, "0")} 课`, `当前位置`],
   ].forEach(([value, label]) => {
     const item = facts.createDiv();
     item.createEl("strong", { text: value });
     item.createSpan({ text: label });
   });
   const heading = root.createDiv({ cls: "section-head" });
-  heading.createEl("h2", { text: "学习路径" });
-  heading.createSpan({ text: "24 课 · 7 个阶段 · 12 周" });
+  heading.createEl("h2", { text: "完整学习路径" });
+  heading.createSpan({ text: "依据项目官方课程表" });
   const road = root.createDiv({ cls: "road" });
-  modules.forEach((m, i) => {
-    const count = m[2].filter((x) => done.has(x[0])).length,
+  learningStages.forEach((stage) => {
+    const stageLessons = stage.range
+        ? lessons.filter((l) => l.n >= stage.range[0] && l.n <= stage.range[1])
+        : [],
+      completed = stageLessons.filter((l) => done.has(l.n)).length,
+      current =
+        stage.range && next.n >= stage.range[0] && next.n <= stage.range[1],
       node = road.createEl("button", {
-        cls: count === m[2].length ? "finished" : "",
+        cls: `${stageLessons.length && completed === stageLessons.length ? "finished" : ""} ${current ? "current" : ""}`,
       });
-    node.createSpan({ text: String(i + 1).padStart(2, "0") });
-    const c = node.createDiv();
-    c.createEl("strong", { text: m[0] });
-    c.createEl("small", { text: m[1] });
-    node.createEl("b", { text: `${count}/${m[2].length}` });
-    node.onclick = () => {
+    node.createSpan({ text: stage.code, cls: "stage-code" });
+    const copy = node.createDiv({ cls: "stage-copy" });
+    copy.createEl("strong", { text: stage.title });
+    copy.createEl("small", { text: stage.detail });
+    const status = node.createDiv({ cls: "stage-status" });
+    if (stageLessons.length) {
+      const dots = status.createDiv({ cls: "stage-dots" });
+      stageLessons.forEach((lesson) =>
+        dots.createSpan({ cls: done.has(lesson.n) ? "done" : "" }),
+      );
+      status.createEl("b", { text: `${completed}/${stageLessons.length}` });
+    } else status.createEl("b", { text: "打开" });
+    node.onclick = async () => {
+      if (stage.path) return this.p.openPath(stage.path);
       this.tab = "course";
-      this.draw();
+      await this.draw();
+      document
+        .querySelector(`[data-stage="${stage.code}"]`)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
   });
 };
@@ -515,7 +553,7 @@ View.prototype.course = async function (root, done) {
   const heading = root.createDiv({ cls: "course-heading" });
   heading.createEl("h2", { text: "课程" });
   heading.createEl("p", {
-    text: "选一课，直接开始。教材、笔记、翻译都在学习工作台。",
+    text: "选择课程开始学习；展开目录可直接定位到教材章节。",
   });
   const timeline = root.createDiv({ cls: "timeline" });
   const sectionMap = new Map(
@@ -526,6 +564,9 @@ View.prototype.course = async function (root, done) {
   modules.forEach((m, moduleIndex) => {
     const group = timeline.createEl("section", { cls: "timeline-group" }),
       marker = group.createDiv({ cls: "timeline-marker" });
+    group.dataset.stage = ["I", "II", "III", "IV", "V", "VI", "VII"][
+      moduleIndex
+    ];
     marker.createSpan({ text: String(moduleIndex + 1).padStart(2, "0") });
     const body = group.createDiv({ cls: "timeline-body" }),
       head = body.createDiv({ cls: "timeline-head" });
@@ -552,10 +593,8 @@ View.prototype.course = async function (root, done) {
       copy.createEl("strong", { text: l.title });
       copy.createEl("span", { text: l.concepts.join(" · ") });
       const actions = row.createDiv({ cls: "lesson-actions" }),
-        study = actions.createEl("button", { text: "学习", cls: "study" }),
-        ai = actions.createEl("button", { text: "翻译全文", cls: "translate" });
+        study = actions.createEl("button", { text: "开始", cls: "study" });
       study.onclick = () => this.p.workspace(l);
-      ai.onclick = () => this.p.translateLesson(l);
       const sections = sectionMap.get(l.n) || [];
       if (sections.length) {
         const directory = item.createEl("details", { cls: "lesson-directory" }),
@@ -567,7 +606,9 @@ View.prototype.course = async function (root, done) {
           const link = links.createEl("button", {
             cls: `directory-link depth-${section.level}`,
           });
-          link.createSpan({ text: String(index + 1).padStart(2, "0") });
+          link.createSpan({
+            text: section.level === 2 ? String(index + 1).padStart(2, "0") : "",
+          });
           link.createEl("b", { text: section.heading });
           link.onclick = () => this.p.jumpToSection(l, section.heading);
         });
@@ -854,10 +895,8 @@ module.exports = class Atlas extends Plugin {
     const bar = view.contentEl.createDiv({ cls: "atlas-translate-bar" });
     bar.createSpan({ text: "AI" });
     const selection = bar.createEl("button", { text: "翻译选中" }),
-      whole = bar.createEl("button", { text: "翻译全文" }),
       settings = bar.createEl("button", { text: "设置", cls: "icon-button" });
     selection.onclick = () => this.translateSelection(view.editor);
-    whole.onclick = () => this.translateDocument(view.editor);
     settings.onclick = () => this.openSettings();
   }
   async translateLesson(lesson) {
@@ -905,21 +944,24 @@ module.exports = class Atlas extends Plugin {
     if (f instanceof TFile) await this.app.workspace.getLeaf(false).openFile(f);
     else new Notice(`找不到 ${l.path}`);
   }
+  async openPath(path) {
+    const file = this.app.vault.getAbstractFileByPath(path);
+    if (file instanceof TFile)
+      await this.app.workspace.getLeaf(false).openFile(file);
+    else new Notice(`找不到 ${path}`);
+  }
   async lessonSections(l) {
     const file = this.app.vault.getAbstractFileByPath(l.path);
     if (!(file instanceof TFile)) return [];
     const cache = this.app.metadataCache.getFileCache(file),
       cached = cache?.headings
         ?.filter((h) => h.level === 2 || h.level === 3)
-        .map((h) => ({ heading: h.heading, level: h.level }));
+        .map((h) => ({ heading: cleanHeading(h.heading), level: h.level }));
     if (cached?.length) return cached;
     const text = await this.app.vault.cachedRead(file);
     return [...text.matchAll(/^(#{2,3})\s+(.+)$/gm)].map((m) => ({
       level: m[1].length,
-      heading: m[2]
-        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-        .replace(/[*_`]/g, "")
-        .trim(),
+      heading: cleanHeading(m[2]),
     }));
   }
   async jumpToSection(l, heading) {
